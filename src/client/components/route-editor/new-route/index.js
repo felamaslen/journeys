@@ -2,6 +2,8 @@ import React from 'react';
 
 import RouteEditor from '~/client/components/route-editor';
 
+import './style.scss';
+
 export default function NewRoute() {
   return (
     <div className="new-route">

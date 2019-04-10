@@ -1,0 +1,14 @@
+.cycle-routes {
+  display: flex;
+  flex: 1;
+  flex-flow: column;
+
+  .page-title {
+    margin: 0;
+    text-align: center;
+  }
+
+  .subtitle {
+    margin: 0 auto;
+  }
+}

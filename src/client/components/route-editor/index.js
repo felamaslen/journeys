@@ -22,6 +22,8 @@ import 'ol/ol.css';
 import { HOME } from '~/constants/map';
 import { useInteraction } from '~/client/hooks/interaction';
 
+import './style.scss';
+
 const fillColor = 'rgba(255, 255, 255, 0.2)';
 const strokeColor = '#ffcc33';
 const pointColor = fillColor;
