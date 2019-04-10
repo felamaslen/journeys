@@ -1,7 +1,4 @@
 {
-  "presets": [
-    ["@babel/preset-env", { "targets": { "node": "current" } } ]
-  ],
   "plugins": [
     ["module-resolver", {
       "root": ["./src"],
@@ -10,5 +7,43 @@
         "~test": "./test"
       }
     }]
-  ]
+  ],
+  "presets": [
+    "@babel/preset-react"
+  ],
+  "env": {
+    "production": {
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "targets": {
+              "browsers": [
+                "last 2 versions",
+                "ie >= 10"
+              ]
+            }
+          }
+        ]
+      ]
+    },
+    "development": {
+      "sourceMaps": "inline",
+      "plugins": [
+        "react-hot-loader/babel"
+      ]
+    },
+    "node": {
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "targets": {
+              "node": "current"
+            }
+          }
+        ]
+      ]
+    }
+  }
 }

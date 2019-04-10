@@ -1,6 +1,9 @@
 module.exports = {
   plugins: [
+    'ava',
     'import',
+    'react',
+    'react-hooks',
   ],
   parser: 'babel-eslint',
   parserOptions: {
@@ -9,10 +12,13 @@ module.exports = {
   },
   env: {
     es6: true,
-    browser: false,
+    browser: true,
     node: true
   },
-  extends: ['airbnb-base'],
+  extends: [
+    'plugin:react/recommended',
+    'airbnb-base',
+  ],
   settings: {
     'import/resolver': {
       alias: {
@@ -23,10 +29,19 @@ module.exports = {
         extensions: ['.js'],
       },
     },
+    react: {
+      version: 'detect',
+    },
   },
   rules: {
+    'arrow-parens': 0,
+    'ava/no-only-test': 'error',
+    'ava/use-t-well': 'error',
+    'ava/use-t': 'error',
     'no-underscore-dangle': 0,
     'comma-dangle': 'error',
     'import/prefer-default-export': 0,
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
   }
 }

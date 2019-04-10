@@ -1,0 +1,19 @@
+@import '~/client/sass/variables';
+
+html {
+    box-sizing: border-box;
+}
+
+*, *::after, *::before {
+    box-sizing: inherit;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.journeys-app {
+    color: black;
+}
+
