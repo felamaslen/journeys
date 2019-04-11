@@ -79,13 +79,13 @@ async function run() {
 
   setupMiddleware(app, config, logger, db);
 
-  setupClient(app, config);
-
   app.get('/health', (req, res) => {
     res.send('ok');
   });
 
   app.use('/api/v1', apiRoutes(config, logger, db));
+
+  setupClient(app, config);
 
   app.use(httpErrorHandler(config, logger));
 

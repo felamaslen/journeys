@@ -4,7 +4,7 @@ import { catchAsyncErrors, clientError } from '~/modules/error-handling';
 import { validate } from '~/modules/validate';
 import { add } from '~/schemas/route';
 
-function routeAdd(config, logger, db) {
+function routeCreate(config, logger, db) {
   return catchAsyncErrors(async (req, res) => {
     const {
       origin,
@@ -43,10 +43,26 @@ function routeAdd(config, logger, db) {
   });
 }
 
+function routeRead(config, logger, db) {
+  return catchAsyncErrors(async (req, res) => {
+    const results = await db.select()
+      .from('routes')
+      .where({ id: req.params.id });
+
+    if (!results.length) {
+      throw clientError('Route not found', 404);
+    }
+
+    res.json(results[0]);
+  });
+}
+
 export function routeCycleRoutes(config, logger, db) {
   const router = new Router();
 
-  router.post('/', validate(add), routeAdd(config, logger, db));
+  router.get('/:id', routeRead(config, logger, db));
+
+  router.post('/', validate(add), routeCreate(config, logger, db));
 
   return router;
 }
