@@ -1,28 +1,14 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import classNames from 'classnames';
-import axios from 'axios';
 
 import { EMPTY_LINE } from '~/client/constants/route';
+import { useApi } from '~/client/hooks/api';
 import RouteEditor from '~/client/components/route-editor';
+import StatusBar from '~/client/components/status-bar';
 
 import './style.scss';
-
-const initRequest = async (source, data, setError, onSuccess) => {
-  try {
-    const res = await axios.post('/api/v1/routes', data, {
-      cancelToken: source.token,
-    });
-
-    setError(null);
-    onSuccess(res.data.id);
-  } catch (err) {
-    if (!axios.isCancel(err)) {
-      setError(err.response.data.err);
-    }
-  }
-};
 
 function NewRoute({ history }) {
   const [route, setRoute] = useState(EMPTY_LINE);
@@ -30,9 +16,6 @@ function NewRoute({ history }) {
   const [destination, setDestination] = useState('');
 
   const [errors, setErrors] = useState({});
-  const [requestError, setRequestError] = useState(null);
-
-  const [source, setSource] = useState(null);
 
   const validate = useCallback(() => ({
     origin: !origin.length,
@@ -40,38 +23,37 @@ function NewRoute({ history }) {
     route: !route.points.length,
   }), [origin, destination, route.points]);
 
-  const onSuccess = useCallback(id => history.push(`/routes/${id}`), [history]);
+  const onSuccess = useCallback(({ id }) => history.push(`/routes/${id}`), [history]);
+
+  const data = useMemo(() => ({
+    origin,
+    destination,
+    ...route,
+  }), [
+    origin,
+    destination,
+    route,
+  ]);
+
+  const [postRequest, requestError] = useApi({
+    method: 'post',
+    url: 'routes',
+    data,
+    onSuccess,
+  });
 
   const onSubmit = useCallback(() => {
     const currentErrors = validate();
 
     setErrors(currentErrors);
-
     if (Object.keys(currentErrors).some(key => currentErrors[key])) {
       return;
     }
 
-    if (source) {
-      source.cancel('New request made');
-    }
-
-    const newSource = axios.CancelToken.source();
-    setSource(newSource);
-
-    const data = {
-      origin,
-      destination,
-      ...route,
-    };
-
-    initRequest(newSource, data, setRequestError, onSuccess);
+    postRequest();
   }, [
-    source,
     validate,
-    origin,
-    destination,
-    route,
-    onSuccess,
+    postRequest,
   ]);
 
   return (
@@ -106,9 +88,7 @@ function NewRoute({ history }) {
           >{'Save'}</button>
         </div>
       </div>
-      <div className={classNames('status', { error: requestError })}>
-        {requestError}
-      </div>
+      <StatusBar error={requestError} />
     </div>
   );
 }
