@@ -9,7 +9,9 @@ import PropTypes from 'prop-types';
 import debounce from 'debounce';
 import OLMap from 'ol/Map';
 import View from 'ol/View';
+import Feature from 'ol/Feature';
 import { transform, toLonLat } from 'ol/proj';
+import { LineString } from 'ol/geom';
 import { Draw, Modify, Snap } from 'ol/interaction';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import { OSM, Vector as VectorSource } from 'ol/source';
@@ -62,7 +64,7 @@ export default function RouteEditor({ initialLine, onChange }) {
 
   const source = useMemo(() => new VectorSource(), []);
 
-  const handleChange = useCallback(debounce(() => {
+  const handleChange = useCallback(onChange && debounce(() => {
     const features = source.getFeatures();
     if (features.length !== 1) {
       return onChange(EMPTY_LINE);
@@ -80,7 +82,9 @@ export default function RouteEditor({ initialLine, onChange }) {
 
     ['changefeature', 'addfeature'].forEach(event => {
       source.un(event);
-      source.on(event, handleChange);
+      if (handleChange) {
+        source.on(event, handleChange);
+      }
     });
   }, [source, handleChange]);
 
@@ -138,6 +142,28 @@ export default function RouteEditor({ initialLine, onChange }) {
     }
   }, [map, draw, drawing]);
 
+  useEffect(() => {
+    if (initialLine !== EMPTY_LINE) {
+      setDrawing(false);
+
+      const coords = new Array(initialLine.points.length / 2).fill(0)
+        .map((item, index) => transform([
+          initialLine.points[index * 2],
+          initialLine.points[index * 2 + 1],
+        ], 'EPSG:4326', PROJECTION));
+
+      const feature = new Feature({
+        geometry: new LineString(coords),
+      });
+
+      source.addFeature(feature);
+    }
+  }, [
+    initialLine,
+    source,
+    setDrawing,
+  ]);
+
   useInteraction(() => new Snap({ source }), map, [source]);
 
   const onClear = useCallback(() => {
@@ -146,7 +172,7 @@ export default function RouteEditor({ initialLine, onChange }) {
     if (source) {
       source.clear();
     }
-  }, [source]);
+  }, [source, onChange]);
 
   return (
     <div className="route-editor">
@@ -160,10 +186,7 @@ export default function RouteEditor({ initialLine, onChange }) {
 
 RouteEditor.propTypes = {
   initialLine: PropTypes.shape({
-    points: PropTypes.arrayOf(PropTypes.shape({
-      lon: PropTypes.number.isRequired,
-      lat: PropTypes.number.isRequired,
-    }).isRequired).isRequired,
+    points: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
     length: PropTypes.number.isRequired,
   }).isRequired,
   onChange: PropTypes.func,

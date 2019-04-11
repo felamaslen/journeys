@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import axios from 'axios';
 
-const makeRequest = async (source, options, onError, onSuccess) => {
+const makeRequest = async (source, options, onError, onSuccess, onComplete) => {
   try {
     const res = await axios({
       ...options,
@@ -20,6 +20,8 @@ const makeRequest = async (source, options, onError, onSuccess) => {
         onError(err.statusCode, err.message);
       }
     }
+  } finally {
+    onComplete();
   }
 };
 
@@ -31,8 +33,11 @@ export function useApi({
 }) {
   const [source, setSource] = useState(null);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const onError = useCallback((statusCode, err) => setError(err), [setError]);
+
+  const onComplete = useCallback(() => setLoading(false), [setLoading]);
 
   useEffect(() => () => {
     if (source) {
@@ -54,7 +59,8 @@ export function useApi({
       data,
     };
 
-    makeRequest(newSource, options, onError, onSuccess);
+    setLoading(true);
+    makeRequest(newSource, options, onError, onSuccess, onComplete);
   }, [
     source,
     method,
@@ -62,7 +68,8 @@ export function useApi({
     data,
     onSuccess,
     onError,
+    onComplete,
   ]);
 
-  return [request, error];
+  return [request, error, loading];
 }
