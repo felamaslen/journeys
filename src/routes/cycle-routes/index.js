@@ -4,6 +4,15 @@ import { catchAsyncErrors, clientError } from '~/modules/error-handling';
 import { validate } from '~/modules/validate';
 import { add } from '~/schemas/route';
 
+function processRouteResponse(item) {
+  const { mid_lon: midLon, mid_lat: midLat, ...route } = item;
+
+  return {
+    ...route,
+    midPoint: [midLon, midLat],
+  };
+}
+
 function routeCreate(config, logger, db) {
   return catchAsyncErrors(async (req, res) => {
     const {
@@ -39,7 +48,7 @@ function routeCreate(config, logger, db) {
       .from('routes')
       .where({ id });
 
-    res.json(addedRoute);
+    res.json(processRouteResponse(addedRoute));
   });
 }
 
@@ -49,7 +58,7 @@ function routeRead(config, logger, db) {
       const cycleRoutes = await db.select()
         .from('routes');
 
-      return res.json(cycleRoutes);
+      return res.json(cycleRoutes.map(processRouteResponse));
     }
 
     const [cycleRoute] = await db.select()
@@ -60,7 +69,7 @@ function routeRead(config, logger, db) {
       throw clientError('Route not found', 404);
     }
 
-    return res.json(cycleRoute);
+    return res.json(processRouteResponse(cycleRoute));
   });
 }
 
