@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { catchAsyncErrors } from '~/modules/error-handling';
+import { catchAsyncErrors, clientError } from '~/modules/error-handling';
 import { validate } from '~/modules/validate';
 import { add } from '~/schemas/route';
 
@@ -14,6 +14,14 @@ function routeAdd(config, logger, db) {
       length,
       bearing,
     } = req.validBody;
+
+    const uniqueExists = await db.select()
+      .from('routes')
+      .where({ origin, destination });
+
+    if (uniqueExists.length) {
+      throw clientError('A duplicate route exists with the same origin and destination');
+    }
 
     const [id] = await db.insert({
       origin,
