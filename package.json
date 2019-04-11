@@ -32,7 +32,9 @@
     }
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "body-parser": "^1.18.3",
+    "classnames": "^2.2.6",
     "clone-deep": "^4.0.1",
     "connect-history-api-fallback": "^1.6.0",
     "debounce": "^1.2.0",
