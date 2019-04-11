@@ -1,15 +1,20 @@
 import express from 'express';
 import path from 'path';
+import bodyParser from 'body-parser';
 import history from 'connect-history-api-fallback';
 
 import { getConfig } from '~/config';
 import { getLogger } from '~/modules/logger';
 import { getDatabase } from '~/modules/db';
+import { httpErrorHandler } from '~/modules/error-handling';
+import { apiRoutes } from '~/routes';
 
 require('dotenv').config();
 
 function setupMiddleware(app) {
   app.set('etag', 'strong');
+
+  app.use(bodyParser.json());
 }
 
 function setupClient(app, config) {
@@ -74,11 +79,15 @@ async function run() {
 
   setupMiddleware(app, config, logger, db);
 
-  setupClient(app, config);
-
   app.get('/health', (req, res) => {
     res.send('ok');
   });
+
+  app.use('/api/v1', apiRoutes(config, logger, db));
+
+  setupClient(app, config);
+
+  app.use(httpErrorHandler(config, logger));
 
   app.listen(config.app.port, () => {
     logger.info('App listening on port %s', config.app.port);

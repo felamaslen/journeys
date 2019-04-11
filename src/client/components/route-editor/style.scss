@@ -1,0 +1,12 @@
+@import '~/client/sass/variables';
+
+.route-editor {
+  display: flex;
+
+  @media only screen and (min-width: $mobile-width) {
+    .map {
+      width: 500px;
+      height: 500px;
+    }
+  }
+}

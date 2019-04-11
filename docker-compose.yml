@@ -6,6 +6,7 @@ services:
       context: .
     volumes:
       - .:/opt/app
+      - /opt/app/node_modules/
     links:
       - postgres:postgres
     environment:
