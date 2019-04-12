@@ -118,7 +118,7 @@ export default function RouteEditor({ initialLine, onChange }) {
     }));
   }, [raster, vector]);
 
-  useInteraction(() => new Modify({ source }), map, [source]);
+  useInteraction(() => handleChange && new Modify({ source }), map, [source, handleChange]);
 
   const draw = useMemo(() => {
     const interaction = new Draw({ source, type: 'LineString' });

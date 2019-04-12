@@ -1,11 +1,21 @@
-import { useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 
 export function useInteraction(makeInteraction, map, memoParameters = []) {
   const interaction = useMemo(makeInteraction, memoParameters);
+  const [prevInteraction, setPrevInteraction] = useState(null);
 
   useEffect(() => {
-    if (map && interaction) {
-      map.addInteraction(interaction);
+    if (map) {
+      if (prevInteraction) {
+        map.removeInteraction(prevInteraction);
+      }
+      if (interaction) {
+        map.addInteraction(interaction);
+      }
     }
-  }, [map, interaction]);
+
+    if (prevInteraction !== interaction) {
+      setPrevInteraction(interaction);
+    }
+  }, [map, interaction, prevInteraction]);
 }
