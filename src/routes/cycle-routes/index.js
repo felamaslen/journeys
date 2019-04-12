@@ -78,10 +78,16 @@ function routeCreate(config, logger, db) {
 function routeRead(config, logger, db) {
   return catchAsyncErrors(async (req, res) => {
     if (!req.params.id) {
-      const cycleRoutes = await db.select()
+      const cycleRoutes = await db.select(
+        'id',
+        'origin',
+        'destination',
+        'length',
+        'bearing',
+      )
         .from('routes');
 
-      return res.json(cycleRoutes.map(processRouteResponse));
+      return res.json(cycleRoutes);
     }
 
     const cycleRoute = await getById(db, req.params.id);
