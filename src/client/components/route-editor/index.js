@@ -10,6 +10,7 @@ import debounce from 'debounce';
 import OLMap from 'ol/Map';
 import View from 'ol/View';
 import Feature from 'ol/Feature';
+import { defaults } from 'ol/interaction';
 import { transform, toLonLat } from 'ol/proj';
 import { LineString } from 'ol/geom';
 import { Draw, Modify, Snap } from 'ol/interaction';
@@ -111,6 +112,7 @@ export default function RouteEditor({ initialLine, onChange }) {
     setMap(new OLMap({
       layers: [raster, vector],
       target: mapRef.current,
+      interactions: defaults({ doubleClickZoom: false }),
       view: new View({
         center: transform(HOME, 'EPSG:4326', PROJECTION),
         zoom: 10,
