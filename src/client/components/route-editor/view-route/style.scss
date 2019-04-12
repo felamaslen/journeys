@@ -1,5 +1,5 @@
+@import '~/client/sass/mixins';
+
 .view-route {
-  display: flex;
-  flex-flow: column;
-  align-items: center;
+  @include flex-col-center;
 }
