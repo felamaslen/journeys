@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import axios from 'axios';
 
 const makeRequest = async (source, options, onError, onSuccess, onComplete) => {
@@ -35,10 +35,9 @@ const makeRequest = async (source, options, onError, onSuccess, onComplete) => {
 export function useApi({
   method = 'get',
   url,
-  data,
   onSuccess,
 }) {
-  const [source, setSource] = useState(null);
+  const source = useRef(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -47,32 +46,29 @@ export function useApi({
   const onComplete = useCallback(() => setLoading(false), [setLoading]);
 
   useEffect(() => () => {
-    if (source) {
-      source.cancel('Component unmounted');
+    if (source.current) {
+      source.current.cancel('Component unmounted');
     }
-  }, [source]);
+  }, []);
 
-  const request = useCallback((requestData = data) => {
-    if (source) {
-      source.cancel('New request made');
+  const request = useCallback(data => {
+    if (source.current) {
+      source.current.cancel('New request made');
     }
 
-    const newSource = axios.CancelToken.source();
-    setSource(newSource);
+    source.current = axios.CancelToken.source();
 
     const options = {
       method,
       url: `/api/v1/${url}`,
-      data: requestData,
+      data,
     };
 
     setLoading(true);
-    makeRequest(newSource, options, onError, onSuccess, onComplete);
+    makeRequest(source.current, options, onError, onSuccess, onComplete);
   }, [
-    source,
     method,
     url,
-    data,
     onSuccess,
     onError,
     onComplete,
