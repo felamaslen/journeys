@@ -47,6 +47,12 @@ module.exports = {
       functions: 'ignore',
     }],
     'import/prefer-default-export': 0,
+    'object-curly-newline': ['error', {
+      ObjectExpression: { multiline: true, consistent: true },
+      ObjectPattern: { multiline: true, consistent: true },
+      ImportDeclaration: { multiline: true, consistent: true, minProperties: 5 },
+      ExportDeclaration: { multiline: true, consistent: true, minProperties: 5 },
+    }],
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
   }

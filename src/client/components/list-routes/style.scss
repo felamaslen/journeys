@@ -1,0 +1,118 @@
+@import '~/client/sass/variables';
+@import '~/client/sass/mixins';
+
+$color-border: #ccc;
+
+.list-routes {
+  @include flex-col-center;
+
+  &-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  
+    @media only screen and (min-width: $mobile-width) {
+      width: 500px;
+    }
+
+    span {
+      display: flex;
+      align-items: center;
+      height: 100%;
+    }
+
+    &-item,
+    &-head {
+      display: flex;
+      border-bottom: 1px solid $color-border;
+      
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+
+    &-item {
+      height: 48px;
+    }
+
+    .origin {
+      flex: 5 0 0;
+    }
+    .destination {
+      flex: 5 0 0;
+    }
+    .length {
+      flex: 3 0 0;
+      text-align: right;
+    }
+    .bearing {
+      flex: 3 0 0;
+      text-align: right;
+    }
+
+    .view,
+    .edit,
+    .delete {
+      flex: 0 0 40px;
+      justify-content: center;
+
+      &-link {
+        display: block;
+        margin: 0;
+        padding: 3px 2px;
+        text-align: center;
+        border: none;
+        font-size: inherit;
+        font-family: inherit;
+        background: none;
+        cursor: pointer;
+        color: black;
+        text-decoration: none;
+        line-height: inherit;
+        outline: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .view-link,
+    .edit-link {
+      &:active {
+        background: rgba(0, 0, 255, 0.1);
+      }
+    }
+
+    .delete-link {
+      color: #900;
+
+      &:active {
+        background: rgba(255, 0, 0, 0.1);
+      }
+    }
+    
+    &-head {
+      margin: 0.5em 0;
+      padding-bottom: 0.25em;
+      font-weight: bold;
+
+      .origin,
+      .destination,
+      .length,
+      .bearing {
+        text-align: left;
+      }
+    }
+
+    &-item {
+      .length,
+      .bearing,
+      .view,
+      .edit,
+      .delete {
+        font-size: 80%;
+      }
+    }
+  }
+}
