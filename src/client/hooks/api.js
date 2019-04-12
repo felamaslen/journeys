@@ -2,15 +2,18 @@ import { useState, useCallback, useEffect } from 'react';
 import axios from 'axios';
 
 const makeRequest = async (source, options, onError, onSuccess, onComplete) => {
+  let success = true;
+  let res = null;
+
   try {
-    const res = await axios({
+    res = await axios({
       ...options,
       cancelToken: source.token,
     });
 
     onError(null);
-    onSuccess(res.data);
   } catch (err) {
+    success = false;
     if (!axios.isCancel(err)) {
       try {
         const { err: responseErr } = err.response.data;
@@ -22,6 +25,10 @@ const makeRequest = async (source, options, onError, onSuccess, onComplete) => {
     }
   } finally {
     onComplete();
+  }
+
+  if (success) {
+    onSuccess(res.data);
   }
 };
 
@@ -45,7 +52,7 @@ export function useApi({
     }
   }, [source]);
 
-  const request = useCallback(() => {
+  const request = useCallback((requestData = data) => {
     if (source) {
       source.cancel('New request made');
     }
@@ -56,7 +63,7 @@ export function useApi({
     const options = {
       method,
       url: `/api/v1/${url}`,
-      data,
+      data: requestData,
     };
 
     setLoading(true);
