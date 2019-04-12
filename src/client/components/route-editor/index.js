@@ -167,6 +167,10 @@ export default function RouteEditor({ initialLine, onChange }) {
   useInteraction(() => new Snap({ source }), map, [source]);
 
   const onClear = useCallback(() => {
+    if (!onChange) {
+      return;
+    }
+
     setDrawing(true);
     onChange(EMPTY_LINE);
     if (source) {
@@ -176,9 +180,11 @@ export default function RouteEditor({ initialLine, onChange }) {
 
   return (
     <div className="route-editor">
-      <div className="buttons">
-        <button className="buttons-clear" onClick={onClear}>{'Clear'}</button>
-      </div>
+      {onChange && (
+        <div className="buttons">
+          <button className="buttons-clear" onClick={onClear}>{'Clear'}</button>
+        </div>
+      )}
       <div className="map" ref={mapRef} />
     </div>
   );
