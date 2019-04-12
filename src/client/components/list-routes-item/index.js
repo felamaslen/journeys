@@ -34,8 +34,8 @@ export default function ListRoutesItem({
     })}>
       <span className="origin">{origin}</span>
       <span className="destination">{destination}</span>
-      <span className="length">{length}</span>
-      <span className="bearing">{bearing}</span>
+      <span className="length">{(length / 1000).toFixed(2)}{' km'}</span>
+      <span className="bearing">{bearing.toFixed(1)}&deg;</span>
       <span className="view">
         <Link
           className="view-link"

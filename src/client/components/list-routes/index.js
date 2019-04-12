@@ -32,6 +32,9 @@ export default function ListRoutes() {
             <span className="destination">{'Destination'}</span>
             <span className="length">{'Length'}</span>
             <span className="bearing">{'Bearing'}</span>
+            <span className="view" />
+            <span className="edit" />
+            <span className="delete" />
           </li>
           {items.map(({ id, ...rest }) => (
             <ListRoutesItem
