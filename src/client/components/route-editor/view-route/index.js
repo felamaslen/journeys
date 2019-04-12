@@ -1,9 +1,10 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 
 import { EMPTY_LINE } from '~/client/constants/route';
-import { useApi } from '~/client/hooks/api';
+import { useFetchRoute } from '~/client/hooks/route';
+import LoadingSpinner from '~/client/components/loading-spinner';
 import RouteEditor from '~/client/components/route-editor';
 import StatusBar from '~/client/components/status-bar';
 
@@ -11,22 +12,11 @@ import './style.scss';
 
 function ViewRoute({ match }) {
   const { params: { id } } = match;
-  const [route, setRoute] = useState(null);
-
-  const onSuccess = useCallback(data => setRoute(data), [setRoute]);
-
-  const [fetchRoute, error, loading] = useApi({
-    url: `routes/${id}`,
-    onSuccess,
-  });
-
-  useEffect(fetchRoute, [id]);
+  const [route, loading, error] = useFetchRoute(match);
 
   return (
     <div className="view-route">
-      {loading && (
-        <div className="loading-spinner">{'Loading...'}</div>
-      )}
+      {loading && <LoadingSpinner />}
       {route && (
         <div className="route-info">
           <table>
@@ -49,6 +39,10 @@ function ViewRoute({ match }) {
               </tr>
             </tbody>
           </table>
+          <Link
+            className="link-edit"
+            to={`/routes/${id}/edit`}
+          >{'Edit'}</Link>
         </div>
       )}
       <RouteEditor

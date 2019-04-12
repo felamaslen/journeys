@@ -143,7 +143,7 @@ export default function RouteEditor({ initialLine, onChange }) {
   }, [map, draw, drawing]);
 
   useEffect(() => {
-    if (initialLine !== EMPTY_LINE) {
+    if (initialLine !== EMPTY_LINE && source.getFeatures().length === 0) {
       setDrawing(false);
 
       const coords = new Array(initialLine.points.length / 2).fill(0)
