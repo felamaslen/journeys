@@ -10,10 +10,9 @@ import debounce from 'debounce';
 import OLMap from 'ol/Map';
 import View from 'ol/View';
 import Feature from 'ol/Feature';
-import { defaults } from 'ol/interaction';
 import { transform, toLonLat } from 'ol/proj';
 import { LineString } from 'ol/geom';
-import { Draw, Modify, Snap } from 'ol/interaction';
+import { Draw, Modify, defaults } from 'ol/interaction';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import { OSM, Vector as VectorSource } from 'ol/source';
 import {
@@ -165,8 +164,6 @@ export default function RouteEditor({ initialLine, onChange }) {
     source,
     setDrawing,
   ]);
-
-  useInteraction(() => new Snap({ source }), map, [source]);
 
   const onClear = useCallback(() => {
     if (!onChange) {
