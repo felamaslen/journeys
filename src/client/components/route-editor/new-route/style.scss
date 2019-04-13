@@ -1,0 +1,5 @@
+@import '~/client/sass/mixins';
+
+.new-route {
+  @include flex-col-center;
+}

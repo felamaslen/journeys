@@ -1,0 +1,6 @@
+@import '~/client/sass/mixins';
+
+.landing-page {
+  @include flex-col-center;
+  flex: 1;
+}
