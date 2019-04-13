@@ -34,7 +34,7 @@ function ViewRoute({ match }) {
                 <td>{(route.length / 1000).toFixed(2)}{' km'}</td>
               </tr>
               <tr>
-                <th>{'Weighted bearing:'}</th>
+                <th>{'Average bearing:'}</th>
                 <td>{route.bearing.toFixed(1)}&deg;</td>
               </tr>
             </tbody>
