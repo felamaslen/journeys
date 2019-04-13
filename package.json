@@ -18,6 +18,10 @@
   },
   "keywords": [],
   "author": "Fela Maslen",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/felamaslen/journeys.git"
+  },
   "license": "MIT",
   "ava": {
     "require": [
