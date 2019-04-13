@@ -52,6 +52,9 @@ export function useApi({
   }, []);
 
   const request = useCallback(data => {
+    if (!url) {
+      return;
+    }
     if (source.current) {
       source.current.cancel('New request made');
     }
