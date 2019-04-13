@@ -43,11 +43,24 @@ function routePostArrival(config, logger, db) {
       arrival = new Date().toISOString(),
     } = req.validBody;
 
+    const { journeyId } = req.params;
+
     await db('journeys')
-      .where({ id: req.params.journeyId })
+      .where({ id: journeyId })
       .update({ arrival });
 
-    res.status(204).end();
+    const [journey] = await db.select(
+      'routes.origin',
+      'routes.destination',
+      'journeys.departure',
+      'journeys.arrival',
+      'routes.length',
+    )
+      .from('journeys')
+      .innerJoin('routes', 'routes.id', 'journeys.route_id')
+      .where({ 'journeys.id': journeyId });
+
+    res.status(201).json(journey);
   });
 }
 
