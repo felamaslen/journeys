@@ -69,12 +69,14 @@ test('getAverageBearing returns the average bearing', t => {
     51.500697,
   ];
 
-  const averageBearing = (1665.89095166694769 * 312.1217180216572
-    + 5072.252824898975 * 280.93743357923506
-    + 12116.5821236346818 * 97.33709568223253
-  ) / (1665.89095166694769 + 5072.252824898975 + 12116.5821236346818);
+  const averageBearing = getBearing(
+    toRadians(0.006274),
+    toRadians(51.496061),
+    toRadians(0.090065),
+    toRadians(51.500697)
+  );
 
-  t.true(Math.abs(getAverageBearing(coordinates) - averageBearing) < 0.0001);
+  t.is(getAverageBearing(coordinates), averageBearing);
 });
 
 test('getMidPoint gets the average latitude and longitude of the line', t => {

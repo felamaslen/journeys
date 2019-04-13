@@ -35,7 +35,7 @@ export function getLength(coordinates) {
 }
 
 export function getAverageBearing(coordinates) {
-  if (coordinates.length < 3) {
+  if (coordinates.length < 4) {
     return null;
   }
 
@@ -43,20 +43,13 @@ export function getAverageBearing(coordinates) {
     throw new Error('Must provide even number of coordinates (flattened)');
   }
 
-  const radians = coordinates.map(toRadians);
+  const [lon1Deg, lat1Deg] = coordinates;
+  const lon2Deg = coordinates[coordinates.length - 2];
+  const lat2Deg = coordinates[coordinates.length - 1];
 
-  const bearings = mapBetween(radians, getBearing);
+  const args = [lon1Deg, lat1Deg, lon2Deg, lat2Deg].map(toRadians);
 
-  const distances = mapBetween(radians, getDistance);
-
-  const weightedBearings = bearings.reduce(
-    (last, value, index) => last + value * distances[index], 0
-  );
-  const sumDistances = sumArray(distances);
-
-  const bearing = weightedBearings / sumDistances;
-
-  return bearing;
+  return getBearing(...args);
 }
 
 export function getMidPoint(coordinates) {
