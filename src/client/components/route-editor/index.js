@@ -27,7 +27,6 @@ import 'ol/ol.css';
 import { HOME, PROJECTION } from '~/constants/map';
 import { EMPTY_LINE } from '~/client/constants/route';
 import { useInteraction } from '~/client/hooks/interaction';
-import { getLength, getAverageBearing } from '~/client/modules/bearing';
 
 import './style.scss';
 
@@ -41,16 +40,7 @@ function getProcessedLine(line) {
     .map(point => toLonLat(point, PROJECTION))
     .reduce((last, coords) => last.concat(coords), []);
 
-  const length = getLength(points);
-  const bearing = getAverageBearing(points);
-  const midPoint = toLonLat(geometry.getFlatMidpoint(), PROJECTION);
-
-  return {
-    points,
-    midPoint,
-    length,
-    bearing,
-  };
+  return { points };
 }
 
 export default function RouteEditor({ initialLine, onChange }) {
@@ -192,7 +182,6 @@ export default function RouteEditor({ initialLine, onChange }) {
 RouteEditor.propTypes = {
   initialLine: PropTypes.shape({
     points: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
-    length: PropTypes.number.isRequired,
   }).isRequired,
   onChange: PropTypes.func,
 };

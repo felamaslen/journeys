@@ -19,7 +19,7 @@ const makeRequest = async (source, options, onError, onSuccess, onComplete) => {
         const { err: responseErr } = err.response.data;
 
         onError(err.statusCode, responseErr);
-      } finally {
+      } catch {
         onError(err.statusCode, err.message);
       }
     }
