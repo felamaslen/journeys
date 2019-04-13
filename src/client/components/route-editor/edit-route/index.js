@@ -17,13 +17,6 @@ const patchSpec = [
     key: 'points',
     type: 'array',
   },
-  {
-    key: 'midPoint',
-    type: 'array',
-    length: 2,
-  },
-  'length',
-  'bearing',
 ];
 
 function EditRoute({ history, match }) {

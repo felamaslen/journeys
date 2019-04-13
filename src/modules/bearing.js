@@ -58,3 +58,16 @@ export function getAverageBearing(coordinates) {
 
   return bearing;
 }
+
+export function getMidPoint(coordinates) {
+  if (coordinates.length % 2 !== 0) {
+    throw new Error('Coordinates length must be even');
+  }
+
+  const sumLon = coordinates.reduce((last, point, index) => last + ((index + 1) % 2) * point, 0);
+  const sumLat = coordinates.reduce((last, point, index) => last + (index % 2) * point, 0);
+
+  const numCoordinates = coordinates.length / 2;
+
+  return [sumLon / numCoordinates, sumLat / numCoordinates];
+}

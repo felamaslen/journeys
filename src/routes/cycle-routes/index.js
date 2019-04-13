@@ -6,6 +6,11 @@ import joi from 'joi';
 import { catchAsyncErrors, clientError } from '~/modules/error-handling';
 import { validate } from '~/modules/validate';
 import { add, patch } from '~/schemas/route';
+import {
+  getLength,
+  getAverageBearing,
+  getMidPoint,
+} from '~/modules/bearing';
 
 async function getById(db, id) {
   const [item] = await db.select()
@@ -35,10 +40,12 @@ function makeRouteDocument(input) {
     origin,
     destination,
     points,
-    midPoint: [midLon, midLat],
-    length,
-    bearing,
   } = input;
+
+  const [midLon, midLat] = getMidPoint(points);
+
+  const length = Math.round(getLength(points));
+  const bearing = getAverageBearing(points);
 
   return {
     origin,
@@ -46,7 +53,7 @@ function makeRouteDocument(input) {
     points: JSON.stringify(points),
     mid_lon: midLon,
     mid_lat: midLat,
-    length: Math.round(length),
+    length,
     bearing,
   };
 }

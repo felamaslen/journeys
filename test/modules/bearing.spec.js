@@ -6,7 +6,8 @@ import {
   getDistance,
   getLength,
   getAverageBearing,
-} from '~/client/modules/bearing';
+  getMidPoint,
+} from '~/modules/bearing';
 
 test('getBearing returns a known bearing (in degrees)', t => {
   const testCases = [
@@ -74,4 +75,22 @@ test('getAverageBearing returns the average bearing', t => {
   ) / (1665.89095166694769 + 5072.252824898975 + 12116.5821236346818);
 
   t.true(Math.abs(getAverageBearing(coordinates) - averageBearing) < 0.0001);
+});
+
+test('getMidPoint gets the average latitude and longitude of the line', t => {
+  const coordinates = [
+    0.006274,
+    51.496061,
+    -0.011579,
+    51.506108,
+    -0.083548,
+    51.514741,
+    0.090065,
+    51.500697,
+  ];
+
+  const averageLon = (0.006274 - 0.011579 - 0.083548 + 0.090065) / 4;
+  const averageLat = (51.496061 + 51.506108 + 51.514741 + 51.500697) / 4;
+
+  t.deepEqual(getMidPoint(coordinates), [averageLon, averageLat]);
 });
