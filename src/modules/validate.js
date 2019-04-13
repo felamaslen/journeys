@@ -8,10 +8,6 @@ export function validate(schema) {
       throw clientError('Must provide body in JSON format');
     }
 
-    if (!(Object.keys(req.body).length)) {
-      throw clientError('Must provide data');
-    }
-
     const { error, value } = joi.validate(req.body, schema);
 
     if (error) {
