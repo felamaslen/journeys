@@ -6,7 +6,7 @@ import './style.scss';
 
 export default function StatusBar({ error }) {
   return (
-    <div className={classNames('status', { error })}>
+    <div className={classNames('status-bar', { error })}>
       {error}
     </div>
   );
