@@ -7,7 +7,6 @@
     "build:server": "BABEL_ENV=node babel src -d dist",
     "build:client": "NODE_ENV=production webpack",
     "build": "npm run build:server && npm run build:client",
-    "postinstall": "npm run build",
     "start": "node dist/index.js",
     "dev": "NODE_ENV=development BABEL_ENV=node babel-watch src/index.js",
     "dev:polling": "NODE_ENV=development BABEL_ENV=node babel-watch -L src/index.js",
