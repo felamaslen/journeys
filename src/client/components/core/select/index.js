@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
+import { classNamePropType } from '~/client/constants/prop-types';
+
 import './style.scss';
 
 export default function Select({ children, className, ...props }) {
@@ -15,10 +17,7 @@ export default function Select({ children, className, ...props }) {
 }
 
 Select.propTypes = {
-  className: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-  ]).isRequired,
+  className: classNamePropType.isRequired,
   children: PropTypes.arrayOf(PropTypes.node.isRequired).isRequired,
 };
 

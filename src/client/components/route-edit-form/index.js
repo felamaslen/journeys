@@ -2,6 +2,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
+import { classNamePropType } from '~/client/constants/prop-types';
 import { EMPTY_LINE } from '~/client/constants/route';
 import RouteEditor from '~/client/components/route-editor';
 import StatusBar from '~/client/components/status-bar';
@@ -95,10 +96,7 @@ export default function RouteEditForm({
 }
 
 RouteEditForm.propTypes = {
-  className: PropTypes.oneOfType([
-    PropTypes.string.isRequired,
-    PropTypes.object.isRequired,
-  ]).isRequired,
+  className: classNamePropType.isRequired,
   values: PropTypes.shape({
     origin: PropTypes.string,
     destination: PropTypes.string,
