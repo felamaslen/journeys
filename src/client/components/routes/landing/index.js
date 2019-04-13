@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 
 import RouteSelector from '~/client/components/route-selector';
 
+import './style.scss';
+
 export default function Landing() {
   const [route, setRoute] = useState(null);
 

@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { useApi } from '~/client/hooks/api';
+import Select from '~/client/components/core/select';
 import LoadingSpinner from '~/client/components/loading-spinner';
 import StatusBar from '~/client/components/status-bar';
 
@@ -38,13 +39,20 @@ export default function RouteSelector({ onSelect }) {
 
   const onSelectRoute = useCallback(evt => onSelect(evt.target.value), [onSelect]);
 
+  const haveOrigin = Boolean(selectedOrigin && !loadingOrigins && routes.length);
+
   return (
     <div className="route-selector">
       {(loadingOrigins || loadingRoutes) && <LoadingSpinner />}
-      {!selectedOrigin && origins.length && (
-        <div className="origin-selector">
+      <button
+        className="button-back"
+        onClick={onResetOrigin}
+        disabled={!haveOrigin}
+      >{'Back'}</button>
+      <div className="form">
+        {Boolean(!selectedOrigin && origins.length) && <>
           <span className="label">{'Origin:'}</span>
-          <select
+          <Select
             className="origin-selector-select"
             value={selectedOrigin}
             onChange={onSelectOrigin}
@@ -54,14 +62,11 @@ export default function RouteSelector({ onSelect }) {
             {origins.map(origin => (
               <option key={origin} value={origin}>{origin}</option>
             ))}
-          </select>
-        </div>
-      )}
-      {selectedOrigin && !loadingOrigins && routes.length && (
-        <div className="route-selector">
-          <button className="button-back" onClick={onResetOrigin}>{'Back'}</button>
+          </Select>
+        </>}
+        {haveOrigin && <>
           <span className="label">{'Destination:'}</span>
-          <select
+          <Select
             className="route-selector-select"
             defaultValue=""
             onChange={onSelectRoute}
@@ -71,9 +76,9 @@ export default function RouteSelector({ onSelect }) {
             {routes.map(({ id, destination }) => (
               <option key={id} value={id}>{destination}</option>
             ))}
-          </select>
-        </div>
-      )}
+          </Select>
+        </>}
+      </div>
       <StatusBar error={errorOrigins || errorRoutes} />
     </div>
   );

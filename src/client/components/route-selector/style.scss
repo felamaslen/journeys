@@ -1,0 +1,22 @@
+@import '~/client/sass/mixins';
+
+.route-selector {
+  @include flex-col-center;
+  width: 100%;
+  flex: 1;
+
+  .label {
+    display: block;
+    margin: 0.5em 0 2em;
+  }
+
+  .button-back {
+    text-decoration: underline;
+  }
+
+  .form {
+    @include flex-col-center;
+    flex: 1;
+    justify-content: center;
+  }
+}
