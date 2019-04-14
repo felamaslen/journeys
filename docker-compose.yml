@@ -11,7 +11,7 @@ services:
     links:
       - postgres:postgres
     environment:
-      - POSTGRES_URL=postgres://docker:a0b5c113x85@postgres:5432/postgres
+      - DATABASE_URL=postgres://docker:a0b5c113x85@postgres:5432/postgres
     ports:
       - 3000
       - 3000:3000
