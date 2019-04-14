@@ -21,9 +21,12 @@ function setupClient(app, config) {
   const production = !config.__DEV__ || process.env.SKIP_CLIENT === 'true';
 
   const privateSPA = (req, res, next) => {
-    req.url = '/index.html';
-
-    next();
+    if (production) {
+      res.sendFile(path.resolve(__dirname, '../dist/public/index.html'));
+    } else {
+      req.url = '/index.html';
+      next();
+    }
   };
 
   app.get('/', privateSPA);
